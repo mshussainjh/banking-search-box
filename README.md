@@ -4,6 +4,16 @@ Banking Search Box is a reusable Web Component built with TypeScript.
 
 It renders a search input with a dropdown of matching results and optional filter chips. The component was written as a plain custom element so it can be dropped into a simple HTML page or used inside React, Angular, Vue, or any other frontend app.
 
+## Quick Start
+
+```bash
+git clone https://github.com/mshussainjh/banking-search-box.git
+cd banking-search-box
+npm install
+npm run build
+npm test
+```
+
 ## What it supports
 
 - search input with clear action
@@ -32,7 +42,7 @@ npm test
 ```
 
 To view the demo locally:
-
+demo\index.html
 ```bash
 npm run demo
 ```
