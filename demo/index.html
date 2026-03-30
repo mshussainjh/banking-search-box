@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BankingSearchBox — Banking Component Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap">
+  <script type="module" src="../dist/banking-search-box.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #f0f4f8;
+      --surface: #ffffff;
+      --border: #dde3ec;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --accent: #1a56db;
+      --font: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    /* ── Header ── */
+    header {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 18px;
+      letter-spacing: -0.02em;
+    }
+
+    .logo-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-size: 18px;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .theme-toggle {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 14px;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 140ms ease;
+    }
+
+    .theme-toggle:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ── Layout ── */
+    main {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 24px 80px;
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .hero h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+      margin-bottom: 10px;
+      line-height: 1.15;
+    }
+
+    .hero h1 span { color: var(--accent); }
+
+    .hero p {
+      color: var(--text-muted);
+      font-size: 15px;
+      line-height: 1.7;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* ── Demo sections ── */
+    .demo-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .demo-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+
+    .demo-card-header {
+      padding: 18px 22px 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .demo-card-header h2 {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    .demo-card-header p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: #eff6ff;
+      color: var(--accent);
+      border: 1px solid #bfdbfe;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .demo-card-body {
+      padding: 22px;
+    }
+
+    /* ── Event log ── */
+    .event-log {
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 14px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: #94a3b8;
+      height: 120px;
+      overflow-y: auto;
+      margin-top: 14px;
+    }
+
+    .event-log .entry {
+      padding: 2px 0;
+      display: flex;
+      gap: 8px;
+    }
+
+    .event-log .ts { color: #475569; flex-shrink: 0; }
+    .event-log .ev { color: #7dd3fc; }
+    .event-log .payload { color: #e2e8f0; }
+
+    /* ── Code snippet ── */
+    pre {
+      background: #0f172a;
+      border-radius: 10px;
+      padding: 16px;
+      font-family: var(--mono);
+      font-size: 12.5px;
+      color: #e2e8f0;
+      overflow-x: auto;
+      line-height: 1.7;
+    }
+
+    pre .kw { color: #7dd3fc; }
+    pre .str { color: #86efac; }
+    pre .attr { color: #fcd34d; }
+    pre .cm { color: #475569; font-style: italic; }
+
+    /* ── Dark mode ── */
+    body.dark {
+      --bg: #0f172a;
+      --surface: #1e293b;
+      --border: #334155;
+      --text: #f1f5f9;
+      --text-muted: #94a3b8;
+    }
+
+    body.dark .badge {
+      background: rgba(26, 86, 219, 0.2);
+      border-color: rgba(26, 86, 219, 0.4);
+    }
+
+    @media (max-width: 600px) {
+      main { padding: 24px 16px 60px; }
+      .demo-card-body { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-icon">🔍</div>
+    BankingSearchBox
+  </div>
+  <div class="header-actions">
+    <button class="theme-toggle" id="themeToggle">☀️ Light</button>
+  </div>
+</header>
+
+<main>
+  <div class="hero">
+    <h1>Banking <span>Search Box</span><br>Web Component</h1>
+    <p>A reusable, framework-agnostic search component with filters, keyboard navigation, accessibility, and theming support.</p>
+  </div>
+
+  <div class="demo-grid">
+
+    <!-- Demo 1: Full-featured with filters -->
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <div>
+          <h2>Full-Featured Search with Filters</h2>
+          <p>Type to search across accounts, transactions, and customers. Use arrow keys to navigate.</p>
+        </div>
+        <span class="badge">Primary Demo</span>
+      </div>
+      <div class="demo-card-body">
+        <banking-search-box
+          id="searchMain"
+          placeholder="Search accounts, transactions, customers…"
+          show-filters="true"
+          filters='[{"id":"account","label":"Accounts","emoji":"🏦"},{"id":"transaction","label":"Transactions","emoji":"💳"},{"id":"customer","label":"Customers","emoji":"👤"},{"id":"loan","label":"Loans","emoji":"📋"}]'
+          debounce="150"
+          highlight="true"
+          max-results="20"
+        ></banking-search-box>
+        <div class="event-log" id="log1">
+          <div class="entry"><span class="ts">--:--:--</span><span class="ev"> ready</span><span class="payload"> component initialized</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Demo 2: Dark theme -->
+    <div class="demo-card" style="background:#0f172a;border-color:#334155;">
+      <div class="demo-card-header" style="border-color:#334155;">
+        <div>
+          <h2 style="color:#f1f5f9;">Dark Theme Variant</h2>
+          <p style="color:#94a3b8;">Same component with <code style="font-family:var(--mono);font-size:11px;background:#1e293b;padding:1px 5px;border-radius:4px;color:#7dd3fc;">theme="dark"</code> attribute.</p>
+        </div>
+        <span class="badge">Theming</span>
+      </div>
+      <div class="demo-card-body">
+        <banking-search-box
+          id="searchDark"
+          theme="dark"
+          placeholder="Search in dark mode…"
+          show-filters="true"
+          filters='[{"id":"account","label":"Accounts"},{"id":"transaction","label":"Transactions"}]'
+          highlight="true"
+        ></banking-search-box>
+      </div>
+    </div>
+
+    <!-- Demo 3: Minimal -->
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <div>
+          <h2>Minimal — No Filters</h2>
+          <p>Stripped-down variant with custom placeholder and no filter bar.</p>
+        </div>
+        <span class="badge">Minimal</span>
+      </div>
+      <div class="demo-card-body">
+        <banking-search-box
+          id="searchMin"
+          placeholder="Quick search…"
+          highlight="true"
+          min-chars="2"
+          debounce="300"
+        ></banking-search-box>
+      </div>
+    </div>
+
+    <!-- Usage code snippet -->
+    <div class="demo-card">
+      <div class="demo-card-header">
+        <div>
+          <h2>Usage</h2>
+          <p>Drop in any HTML page or framework — no build step required.</p>
+        </div>
+        <span class="badge">Code</span>
+      </div>
+      <div class="demo-card-body">
+        <pre><span class="cm">&lt;!-- 1. Import the component --&gt;</span>
+<span class="kw">&lt;script</span> <span class="attr">type</span>=<span class="str">"module"</span> <span class="attr">src</span>=<span class="str">"./banking-search-box.js"</span><span class="kw">&gt;&lt;/script&gt;</span>
+
+<span class="cm">&lt;!-- 2. Use it anywhere --&gt;</span>
+<span class="kw">&lt;smart-search</span>
+  <span class="attr">placeholder</span>=<span class="str">"Search accounts…"</span>
+  <span class="attr">show-filters</span>=<span class="str">"true"</span>
+  <span class="attr">filters</span>=<span class="str">'[{"id":"account","label":"Accounts","emoji":"🏦"}]'</span>
+  <span class="attr">highlight</span>=<span class="str">"true"</span>
+  <span class="attr">debounce</span>=<span class="str">"200"</span>
+<span class="kw">&gt;&lt;/smart-search&gt;</span>
+
+<span class="cm">// 3. Listen for events</span>
+<span class="kw">const</span> search = document.querySelector(<span class="str">'smart-search'</span>);
+
+search.addEventListener(<span class="str">'ss-search'</span>, async ({ detail }) => {
+  <span class="kw">const</span> results = await fetchResults(detail.query);
+  search.setResults(results);  <span class="cm">// inject results back</span>
+});
+
+search.addEventListener(<span class="str">'ss-select'</span>, ({ detail }) => {
+  console.log(<span class="str">'Selected:'</span>, detail.item);
+});</pre>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+// ── Mock banking data ────────────────────────────────────────────────────────
+const MOCK_DATA = [
+  { type:'account', title:'John Doe - Checking', subtitle:'ACC-001234 · $12,450.00', badge:'Active', icon:'🏦' },
+  { type:'account', title:'Jane Smith - Savings', subtitle:'ACC-005678 · $34,890.50', badge:'Active', icon:'🏦' },
+  { type:'account', title:'Acme Corp - Business', subtitle:'ACC-009012 · $198,230.00', badge:'Active', icon:'🏢' },
+  { type:'account', title:'Robert Brown - Checking', subtitle:'ACC-003456 · $1,200.75', badge:'Frozen', icon:'🏦' },
+  { type:'transaction', title:'Wire Transfer to HSBC', subtitle:'TXN-88821 · Mar 24, 2026', badge:'-$5,000', icon:'↗️' },
+  { type:'transaction', title:'Payroll Deposit', subtitle:'TXN-88720 · Mar 23, 2026', badge:'+$3,200', icon:'↙️' },
+  { type:'transaction', title:'ATM Withdrawal', subtitle:'TXN-88650 · Mar 22, 2026', badge:'-$200', icon:'🏧' },
+  { type:'transaction', title:'Online Purchase - Amazon', subtitle:'TXN-88601 · Mar 21, 2026', badge:'-$89.99', icon:'💳' },
+  { type:'customer', title:'John Doe', subtitle:'Customer since 2019 · Tier: Gold', badge:'KYC ✓', icon:'👤' },
+  { type:'customer', title:'Jane Smith', subtitle:'Customer since 2021 · Tier: Silver', badge:'KYC ✓', icon:'👤' },
+  { type:'customer', title:'Acme Corp', subtitle:'Business · Corporate client', badge:'KYC ✓', icon:'🏢' },
+  { type:'loan', title:'Mortgage — John Doe', subtitle:'LN-44201 · $285,000 @ 6.4%', badge:'Current', icon:'🏠' },
+  { type:'loan', title:'Auto Loan — Jane Smith', subtitle:'LN-44089 · $18,500 @ 7.1%', badge:'Current', icon:'🚗' },
+  { type:'loan', title:'Business Line — Acme Corp', subtitle:'LN-44301 · $500,000 @ 5.9%', badge:'Review', icon:'📋' },
+];
+
+function search(query) {
+  const q = query.toLowerCase();
+  return MOCK_DATA.filter(item =>
+    item.title.toLowerCase().includes(q) ||
+    (item.subtitle || '').toLowerCase().includes(q)
+  );
+}
+
+// ── Wire up main demo ────────────────────────────────────────────────────────
+const searchMain = document.getElementById('searchMain');
+const log1 = document.getElementById('log1');
+
+function logEvent(name, detail) {
+  const ts = new Date().toLocaleTimeString('en', { hour12: false });
+  const entry = document.createElement('div');
+  entry.className = 'entry';
+  entry.innerHTML = `<span class="ts">${ts}</span><span class="ev"> ${name}</span><span class="payload"> ${JSON.stringify(detail).slice(0, 80)}</span>`;
+  log1.appendChild(entry);
+  log1.scrollTop = log1.scrollHeight;
+}
+
+searchMain.addEventListener('ss-search', ({ detail }) => {
+  logEvent('ss-search', detail);
+  setTimeout(() => {
+    searchMain.setResults(search(detail.query));
+  }, 120); // simulate async
+});
+
+searchMain.addEventListener('ss-select', ({ detail }) => {
+  logEvent('ss-select', { title: detail.item.title, type: detail.item.type });
+});
+
+searchMain.addEventListener('ss-filter', ({ detail }) => {
+  logEvent('ss-filter', detail);
+});
+
+searchMain.addEventListener('ss-clear', () => logEvent('ss-clear', {}));
+
+// ── Wire up dark demo ────────────────────────────────────────────────────────
+const searchDark = document.getElementById('searchDark');
+searchDark.addEventListener('ss-search', ({ detail }) => {
+  setTimeout(() => searchDark.setResults(search(detail.query)), 120);
+});
+
+// ── Wire up minimal demo ─────────────────────────────────────────────────────
+const searchMin = document.getElementById('searchMin');
+searchMin.addEventListener('ss-search', ({ detail }) => {
+  setTimeout(() => searchMin.setResults(search(detail.query)), 80);
+});
+
+// ── Theme toggle ─────────────────────────────────────────────────────────────
+const btn = document.getElementById('themeToggle');
+btn.addEventListener('click', () => {
+  const dark = document.body.classList.toggle('dark');
+  btn.textContent = dark ? '🌙 Dark' : '☀️ Light';
+});
+</script>
+
+</body>
+</html>

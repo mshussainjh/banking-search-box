@@ -1,0 +1,25 @@
+{
+  "name": "banking-search-box",
+  "version": "1.0.0",
+  "description": "Accessible banking search box Web Component for enterprise applications",
+  "main": "dist/banking-search-box.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "test": "node --test tests/banking-search-box.test.js",
+    "demo": "npx --yes serve . -p 3000 --no-clipboard"
+  },
+  "keywords": [
+    "web-component",
+    "search",
+    "banking",
+    "custom-elements"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "jsdom": "^26.1.0",
+    "typescript": "^5.8.3"
+  },
+  "types": "dist/banking-search-box.d.ts"
+}
